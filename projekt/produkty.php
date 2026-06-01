@@ -46,15 +46,7 @@ require __DIR__ . '/partials/header.php';
                     <?php endforeach; ?>
                 </ul>
                 
-                <hr style="margin: 20px 0;">
-                
-                <h3 style="color: var(--heading-color); margin-bottom: 15px;">Řazení</h3>
-                <select style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc;">
-                    <option>Doporučené</option>
-                    <option>Nejlevnější</option>
-                    <option>Nejdražší</option>
-                    <option>Abecedně</option>
-                </select>
+
             </aside>
 
             <!-- Product Grid Area -->
