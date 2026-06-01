@@ -1,0 +1,73 @@
+@media (max-width: 1200px) {
+    .shop-inner {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 1000px) {
+    .hero h1 {
+        font-size: 6rem;
+    }
+    
+    .shop-inner {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 30px;
+    }
+    
+    .product-detail-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .header-bar {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 700px) {
+    .popup-inner {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .popup-image img {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .cart-steps {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+@media (max-width: 500px) {
+    .hero h1 {
+        font-size: 3rem;
+    }
+    
+    .shop-inner {
+        grid-template-columns: 1fr;
+        padding: 20px;
+        width: 90%;
+    }
+    
+    .fixed-logo, .fixed-cart {
+        font-size: 35px;
+    }
+    
+    .cart-box {
+        padding: 20px 15px;
+    }
+    
+    .payment-methods, .shipping-methods {
+        flex-direction: column;
+    }
+}

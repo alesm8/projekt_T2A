@@ -1,0 +1,31 @@
+<?php
+declare(strict_types=1);
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Load Core
+require_once __DIR__ . '/Database.php';
+require_once __DIR__ . '/Cart.php';
+require_once __DIR__ . '/Validator.php';
+
+// Load DTOs
+require_once __DIR__ . '/DTO/CategoryDTO.php';
+require_once __DIR__ . '/DTO/ProductDTO.php';
+require_once __DIR__ . '/DTO/ProductImageDTO.php';
+require_once __DIR__ . '/DTO/ProductParameterDTO.php';
+require_once __DIR__ . '/DTO/ShippingMethodDTO.php';
+require_once __DIR__ . '/DTO/PaymentMethodDTO.php';
+require_once __DIR__ . '/DTO/CustomerDTO.php';
+require_once __DIR__ . '/DTO/OrderDTO.php';
+require_once __DIR__ . '/DTO/OrderItemDTO.php';
+require_once __DIR__ . '/DTO/CartItemDTO.php';
+
+// Load Repositories
+require_once __DIR__ . '/Repository/CategoryRepository.php';
+require_once __DIR__ . '/Repository/ProductRepository.php';
+require_once __DIR__ . '/Repository/ShippingMethodRepository.php';
+require_once __DIR__ . '/Repository/PaymentMethodRepository.php';
+require_once __DIR__ . '/Repository/CustomerRepository.php';
+require_once __DIR__ . '/Repository/OrderRepository.php';
