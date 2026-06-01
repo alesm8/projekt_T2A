@@ -54,7 +54,7 @@ projekt/
 │   ├── header.php            ← hlavička s navigací a dynamickým čítačem košíku
 │   └── footer.php            ← patička
 ├── assets/
-│   └── css/                  ← CSS styly e-shopu
+│   ├── css/                  ← CSS styly e-shopu
 │   └── images/               ← obrázky produktů a kategorií
 ├── index.php                 ← hlavní stránka (výpis doporučených produktů s popupy z DB)
 ├── kategorie.php             ← přehled kategorií produktů z DB
@@ -73,8 +73,51 @@ projekt/
 
 ---
 
+## Databázové tabulky
+
+| Tabulka | Popis |
+|---------|-------|
+| `categories` | Kategorie produktů (název, slug, obrázek, popis) |
+| `products` | Produkty (název, cena, popis, obrázek, příznak doporučený, sleva) |
+| `product_images` | Galerie obrázků produktu |
+| `product_parameters` | Parametry produktu – `type`: `'select'` = volitelný (dropdown), `'info'` = pouze informační |
+| `shipping_methods` | Číselník způsobů dopravy (název, cena, doba doručení) |
+| `payment_methods` | Číselník způsobů platby (název, cena/poplatek) |
+| `cart` | Obsah košíků (spárováno s `session_id`, ukládá se v DB) |
+| `customers` | Zákazníci (jméno, email, telefon, adresa) |
+| `orders` | Objednávky (zákazník, doprava, platba, cena dopravy/platby, celková cena, stav) |
+| `order_items` | Položky objednávky (produkt, varianta, množství, jednotková cena) |
+
+---
+
+## Prohlížení databáze v terminálu
+
+Pro přímý náhled do databáze z terminálu Codespaces použijte `sqlite3`:
+
+```bash
+sqlite3 projekt/database/eshop.db
+
+# Výpis všech tabulek
+.tables
+
+# Zobrazení objednávek
+SELECT * FROM orders;
+
+# Zobrazení zákazníků
+SELECT * FROM customers;
+
+# Zobrazení obsahu košíků
+SELECT * FROM cart;
+
+# Opuštění konzole
+.quit
+```
+
+---
+
 ## Bezpečnost a funkce
 
 - **CSRF Ochrana:** Všechny akce, které modifikují stav (přidání do košíku, úprava množství, odebrání a odeslání objednávky), jsou chráněny pomocí CSRF tokenu generovaného v `header.php` a ověřovaného na straně serveru.
 - **Validace:** Formulář pro dodací údaje využívá fluent rozhraní třídy `Validator` k ověření e-mailu, telefonu (české a slovenské předvolby) a formátu PSČ (5 číslic).
 - **Perzistentní košík v DB:** Položky v košíku jsou ukládány do SQLite tabulky `cart` spárované s `session_id()` uživatele, což zaručuje bezpečné uložení košíku přímo v databázi.
+- **Zápis objednávky:** Po dokončení v `doprava-platba.php` se automaticky založí záznam o zákazníkovi v `customers`, vytvoří objednávka v `orders`, zapíšou položky do `order_items` (v jedné bezpečné transakci), vyčistí se košík v databázi a uživatel je přesměrován na `potvrzeni.php`.
