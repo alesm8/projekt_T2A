@@ -55,7 +55,7 @@ require __DIR__ . '/partials/header.php';
             <div class="product-info">
                 <h1 style="color: var(--heading-color); margin-bottom: 15px;"><?= htmlspecialchars($product->name) ?></h1>
                 
-                <p style="font-size: 1.2rem; font-weight: bold; color: var(--primary-color); margin-bottom: 20px;">
+                <p style="font-size: 1.2rem; font-weight: bold; color: var(--primary-color); margin-bottom: 20px;" id="price-display" data-base-price="<?= $product->price ?>">
                     <?= number_format($product->price, 0, ',', ' ') ?> Kč / 100g
                 </p>
                 
@@ -73,9 +73,10 @@ require __DIR__ . '/partials/header.php';
                     <?php if ($product->hasVariants): ?>
                         <div>
                             <label for="variant" style="font-weight: bold; display: block; margin-bottom: 5px;">Hmotnost balení:</label>
-                            <select id="variant" name="variant" style="padding: 10px; width: 100%; max-width: 300px; border-radius: 8px;">
+                            <select id="variant" name="variant" style="padding: 10px; width: 100%; max-width: 300px; border-radius: 8px;" onchange="updatePrice(this)">
                                 <?php foreach ($selectableParams as $param): ?>
-                                    <option value="<?= htmlspecialchars($param->value) ?>"><?= htmlspecialchars($param->value) ?></option>
+                                    <?php preg_match('/\d+/', $param->value, $m); $grams = $m[0] ?? 100; ?>
+                                    <option value="<?= htmlspecialchars($param->value) ?>" data-grams="<?= $grams ?>"><?= htmlspecialchars($param->value) ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -104,6 +105,23 @@ require __DIR__ . '/partials/header.php';
             </div>
         </div>
     </main>
+
+<script>
+function updatePrice(select) {
+    const priceDisplay = document.getElementById('price-display');
+    const basePrice = parseFloat(priceDisplay.dataset.basePrice);
+    const selectedOption = select.options[select.selectedIndex];
+    const grams = parseInt(selectedOption.dataset.grams) || 100;
+    const totalPrice = Math.round(basePrice * grams / 100);
+    priceDisplay.textContent = totalPrice.toLocaleString('cs-CZ') + ' Kč / ' + grams + 'g';
+}
+
+// Spusť při načtení stránky
+document.addEventListener('DOMContentLoaded', function() {
+    const select = document.getElementById('variant');
+    if (select) updatePrice(select);
+});
+</script>
 
 <?php
 require __DIR__ . '/partials/footer.php';
