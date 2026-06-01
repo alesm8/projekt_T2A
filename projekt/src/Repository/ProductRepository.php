@@ -59,6 +59,26 @@ class ProductRepository
     /**
      * @return ProductDTO[]
      */
+    public function getAll(): array
+    {
+        $stmt = $this->db->prepare("
+            SELECT p.*, c.name AS category_name 
+            FROM products p
+            LEFT JOIN categories c ON p.category_id = c.id
+            ORDER BY p.id ASC
+        ");
+        $stmt->execute();
+
+        $products = [];
+        foreach ($stmt->fetchAll() as $row) {
+            $products[] = $this->mapRowToDTO($row);
+        }
+        return $products;
+    }
+
+    /**
+     * @return ProductDTO[]
+     */
     public function getByCategory(int $categoryId): array
     {
         $stmt = $this->db->prepare("

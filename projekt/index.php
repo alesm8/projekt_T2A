@@ -2,7 +2,7 @@
 require_once __DIR__ . '/src/bootstrap.php';
 
 $productRepo = new ProductRepository();
-$featuredProducts = $productRepo->getFeatured();
+$allProducts = $productRepo->getAll();
 
 $pageTitle = 'Čajový svět | Domů';
 require __DIR__ . '/partials/header.php';
@@ -22,12 +22,12 @@ require __DIR__ . '/partials/header.php';
     </div>
 
     <div class="shop-inner">
-      <?php if (empty($featuredProducts)): ?>
-        <p style="text-align: center; width: 100%; font-size: 1.2rem; grid-column: 1 / -1;">Žádné doporučené produkty nebyly nalezeny.</p>
+      <?php if (empty($allProducts)): ?>
+        <p style="text-align: center; width: 100%; font-size: 1.2rem; grid-column: 1 / -1;">Žádné produkty nebyly nalezeny.</p>
       <?php else: ?>
-        <?php foreach ($featuredProducts as $product): ?>
+        <?php foreach ($allProducts as $product): ?>
           <article class="produkt">
-            <a href="#p<?= $product->id ?>">
+            <a href="produkt.php?slug=<?= urlencode($product->slug) ?>">
               <img src="<?= htmlspecialchars($product->image) ?>" alt="<?= htmlspecialchars($product->name) ?>">
               <p><?= htmlspecialchars($product->name) ?></p>
               <strong><?= number_format($product->price, 0, ',', ' ') ?> Kč / 100g</strong>
@@ -38,33 +38,6 @@ require __DIR__ . '/partials/header.php';
       <?php endif; ?>
     </div>
   </main>
-
-  <!-- Modals for details on homepage -->
-  <?php foreach ($featuredProducts as $product): ?>
-    <div id="p<?= $product->id ?>" class="popup">
-      <div class="popup-content">
-        <a href="#!" class="close">✖</a>
-        <div class="popup-inner">
-          <div class="popup-image">
-            <img src="<?= htmlspecialchars($product->image) ?>" alt="<?= htmlspecialchars($product->name) ?>">
-          </div>
-          <div class="popup-text">
-            <h2><?= htmlspecialchars($product->name) ?></h2>
-            <p><?= htmlspecialchars($product->description) ?></p>
-            <strong><?= number_format($product->price, 0, ',', ' ') ?> Kč / 100g</strong>
-            
-            <form action="cart-action.php" method="POST" style="margin-top: 15px;">
-              <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
-              <input type="hidden" name="action" value="add">
-              <input type="hidden" name="product_id" value="<?= $product->id ?>">
-              <input type="hidden" name="redirect_to" value="index.php">
-              <button type="submit" class="btn" style="border: none; cursor: pointer; display: inline-block;">Přidat do košíku</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  <?php endforeach; ?>
 
 <?php
 require __DIR__ . '/partials/footer.php';
